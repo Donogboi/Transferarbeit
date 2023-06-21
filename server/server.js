@@ -2,6 +2,7 @@ const WebSocket = require("ws");
 const redis = require("redis");
 
 const activeUsers = new Set();
+const clients = new Set();
 
 const initializeWebsocketServer = async (server) => {
   const client = redis.createClient({
@@ -34,6 +35,7 @@ const initializeWebsocketServer = async (server) => {
         if (!activeUsers.has(newUsername)) {
           username = newUsername;
           activeUsers.add(username);
+          clients.add({ username, socket: ws });
           broadcastActiveUsers();
           console.log(`Username set: ${username}`);
         } else {
@@ -63,6 +65,7 @@ const initializeWebsocketServer = async (server) => {
     ws.on("close", () => {
       if (username) {
         activeUsers.delete(username);
+        clients.delete({ username, socket: ws });
         broadcastActiveUsers();
         console.log(`User left: ${username}`);
       }

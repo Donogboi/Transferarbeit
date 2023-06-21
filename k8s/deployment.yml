@@ -4,7 +4,7 @@ metadata:
   name: chat-deployment
   namespace: {{ namespace }} # Replace with your namespace
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: chat

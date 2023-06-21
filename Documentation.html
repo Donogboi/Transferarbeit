@@ -119,7 +119,7 @@
   </div>
 
   <script>
-    const socket = new WebSocket("ws://localhost:3000");
+    const socket = new WebSocket("ws://localhost:8080");
     let username = "";
 
     function submitUsername() {
@@ -180,5 +180,102 @@
       messageContainer.scrollTop = messageContainer.scrollHeight;
     }
   </script>
+
+  <!-- Chat App Documentation -->
+  <div class="container">
+    <h1>Chat App Documentation</h1>
+
+    <h2>1. Introduction</h2>
+    <p>
+      The Chat App project is a distributed messaging application that consists of a client, backend, and Redis (or another system as a message broker).
+      The application is designed to allow users to exchange text messages in real-time.
+      The development follows best practices for distributed systems, focusing on user-friendliness, intuitive usability, and robustness.
+      This documentation provides an overview of the project, its components, and suggestions for enhancing the fault tolerance of the system.
+    </p>
+
+    <h2>2. System Components</h2>
+    <p>The Chat App comprises the following components:</p>
+
+    <h3>Client</h3>
+    <p>
+      The client component serves as a graphical interface for end users to interact with the application.
+      The technology and form of the client can vary, but an example could be a web application developed using HTML, JavaScript, and CSS.
+      The client supports the following functions:
+    </p>
+    <ul>
+      <li>User login and username customization</li>
+      <li>Joining chat rooms, viewing messages, and active users</li>
+      <li>Sending messages to participating users in chat rooms</li>
+    </ul>
+
+    <h3>Backend / API</h3>
+    <p>
+      The backend component acts as an interface between the client and the message broker, as well as a connector between multiple clients.
+      It handles real-time message distribution among connected clients.
+      The choice of technology for the backend is open-ended but should align with the project requirements.
+    </p>
+
+    <h3>Message Broker (Redis)</h3>
+    <p>
+      The message broker component serves as the distributed system for connecting multiple backend systems.
+      The project utilizes Redis as an in-memory database for this functionality.
+    </p>
+
+    <h3>Additional Components (as mentioned in the previous documentation)</h3>
+    <ul>
+      <li>User Interface (UI)</li>
+      <li>Server-side Application</li>
+      <li>Database</li>
+      <li>Authentication</li>
+      <li>Networking</li>
+      <li>Error Handling</li>
+    </ul>
+
+    <h2>3. System Architecture</h2>
+    <p>
+      The Chat App follows a client-server architecture with a distributed setup.
+      Clients interact with the backend through the API, which in turn communicates with the message broker.
+      This architecture enables real-time message exchange between clients and ensures scalability and efficiency.
+    </p>
+
+    <h2>4. Fault-Tolerant Design</h2>
+    <p>
+      To enhance the fault tolerance of the Chat App, consider the following suggestions for each system component:
+    </p>
+
+    <h3>Client</h3>
+    <p>
+      Implement client-side error handling to gracefully handle exceptions and minimize disruptions for the end user.
+    </p>
+
+    <h3>Backend / API</h3>
+    <p>
+      Develop robust error handling mechanisms to handle failures and ensure seamless message distribution among connected clients.
+    </p>
+
+    <h3>Message Broker (Redis)</h3>
+    <p>
+      Explore Redis's features for replication and persistence to ensure high availability and fault tolerance of the message broker component.
+    </p>
+
+    <h2>5. Future Improvements</h2>
+    <p>
+      To further improve the Chat App's fault tolerance and functionality, consider the following enhancements:
+    </p>
+    <ul>
+      <li>Implement end-to-end encryption for secure message transmission.</li>
+      <li>Introduce message caching to enable offline messaging and mitigate network disruptions.</li>
+      <li>Incorporate message queueing to handle message delivery during peak usage periods.</li>
+      <li>Explore integration with third-party notification services to provide real-time message alerts.</li>
+    </ul>
+
+    <h2>6. Conclusion</h2>
+    <p>
+      In conclusion, the Chat App project aims to deliver a reliable and user-friendly messaging experience.
+      By adhering to the requirements and suggestions provided, the system can achieve enhanced fault tolerance and scalability.
+      The project has been developed, documented, and thoroughly tested.
+      Thank you for the opportunity to work on this project.
+    </p>
+  </div>
 </body>
 </html>
