@@ -7,4 +7,4 @@ const hello = (req, res) => {
   res.send("Hello World!");
 };
 
-module.exports = { initializeAPI };
+module.exports = { initializeAPI, hello };

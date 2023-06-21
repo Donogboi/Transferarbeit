@@ -1,14 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Chat Program</title>
-    <link rel="stylesheet" href="/style.css">
-    <script src="/script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KingsApp</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f7f9;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 5px solid #a6c8e2;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: #fff4e5;
+    }
+
+    .user-container,
+    .chat-container,
+    .active-users-container {
+      margin-bottom: 20px;
+    }
+
+    .input-container {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    .input-container select {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .input-container button {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 16px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .message-container {
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .message-sender-don {
+      background-color: #9f9191;
+      text-align: left;
+      margin-bottom: 5px;
+    }
+
+    .message-sender-corina {
+      background-color: #d2d2ff;
+      text-align: right;
+      margin-bottom: 5px;
+    }
+
+    .message-sender-don strong,
+    .message-sender-corina strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .message-sender-don span,
+    .message-sender-corina span {
+      display: block;
+    }
+
+    .active-users-list {
+      list-style-type: none;
+      padding: 0;
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello World</h1>
+  <div class="container">
+    <div class="user-container">
+      <h2>Username</h2>
+      <div class="input-container">
+        <select class="username-select" id="username-select" onchange="submitUsername()">
+          <option value="">Select Username</option>
+          <option value="Don">Don</option>
+          <option value="Corina">Corina</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="chat-container" id="chat-container" style="display: none;">
+      <h2>Chat</h2>
+      <div class="message-container" id="message-container"></div>
+      <div class="input-container">
+        <input type="text" class="message-input" id="message-input" placeholder="Type your message" disabled>
+        <button class="send-button" id="send-button" onclick="sendMessage()" disabled>Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const socket = new WebSocket("ws://localhost:8080");
+    let username = "";
+
+    function submitUsername() {
+      const usernameSelect = document.getElementById("username-select");
+      username = usernameSelect.value.trim();
+      if (username) {
+        usernameSelect.disabled = true;
+        document.getElementById("chat-container").style.display = "block";
+        document.getElementById("message-input").disabled = false;
+        document.getElementById("send-button").disabled = false;
+        document.getElementById("message-input").focus();
+      }
+    }
+
+    function sendMessage() {
+      const messageInput = document.getElementById("message-input");
+      const message = messageInput.value.trim();
+      if (message) {
+        socket.send(`${username}: ${message}`);
+        messageInput.value = "";
+        appendMessage(username, message);
+        username = ""; // Reset username
+        document.getElementById("username-select").disabled = false; // Enable username select
+      }
+    }
+
+    document.getElementById("message-input").addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    socket.onmessage = function (event) {
+      const message = event.data;
+      const [sender, content] = message.split(": ");
+      appendMessage(sender, content);
+
+      // Enable username select for other users
+      const usernameSelect = document.getElementById("username-select");
+      if (sender !== username && !usernameSelect.disabled) {
+        usernameSelect.disabled = false;
+      }
+    };
+
+    function appendMessage(sender, message) {
+      const messageContainer = document.getElementById("message-container");
+      const messageElement = document.createElement("div");
+      messageElement.classList.add("message");
+      messageElement.classList.add(`message-sender-${sender.toLowerCase()}`);
+      const senderElement = document.createElement("strong");
+      senderElement.innerText = sender;
+      const contentElement = document.createElement("span");
+      contentElement.innerText = message;
+      messageElement.appendChild(senderElement);
+      messageElement.appendChild(contentElement);
+      messageContainer.appendChild(messageElement);
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+  </script>
 </body>
 </html>
